@@ -42,15 +42,25 @@ jobs:
         run: |
           $csprojPath = 'SIMS Booking.csproj'
           [xml]$csproj = Get-Content $csprojPath
+          
+          # Attempt to find the RuntimeIdentifiers node
           $runtimeIdentifiersNode = $csproj.Project.PropertyGroup.RuntimeIdentifiers
+          
           if ($runtimeIdentifiersNode -eq $null) {
-            $newNode = $csproj.CreateElement("RuntimeIdentifiers", $csproj.Project.NamespaceURI)
-            $newNode.InnerText = 'win'
-            $csproj.Project.PropertyGroup.AppendChild($newNode)
+              # If the node doesn't exist, create it and add 'win' as its value
+              $newNode = $csproj.CreateElement("RuntimeIdentifiers", $csproj.Project.NamespaceURI)
+              $newNode.InnerText = 'win'
+              $csproj.Project.PropertyGroup.AppendChild($newNode)
           }
           else {
-            $runtimeIdentifiersNode.InnerText = 'win;' + $runtimeIdentifiersNode.InnerText
+              # If the node exists, prepend 'win;' to its current value
+              # First, ensure that 'win' isn't already part of the value to avoid duplication
+              if (-not $runtimeIdentifiersNode.InnerText.Split(';').Contains('win')) {
+                  $runtimeIdentifiersNode.InnerText = 'win;' + $runtimeIdentifiersNode.InnerText
+              }
           }
+
+          # Save the changes back to the project file
           $csproj.Save($csprojPath)
 
       - name: Begin SonarCloud analysis
