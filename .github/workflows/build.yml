@@ -51,7 +51,7 @@ jobs:
           else {
             $runtimeIdentifiersNode.InnerText = 'win;' + $runtimeIdentifiersNode.InnerText
           }
-          $csproj.Save($csp
+          $csproj.Save($csprojPath)
 
       - name: Begin SonarCloud analysis
         env:
