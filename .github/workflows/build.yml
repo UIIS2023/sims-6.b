@@ -35,7 +35,7 @@ jobs:
         shell: powershell
 
       - name: Restore NuGet packages
-        run: dotnet restore SIMS Booking.sln
+        run: dotnet restore "SIMS Booking.sln"
         shell: powershell
 
       - name: Ensure RuntimeIdentifier 'win'
@@ -61,7 +61,7 @@ jobs:
         shell: powershell
 
       - name: Build the project
-        run: msbuild /t:Rebuild /p:Configuration=Release SIMS Booking.sln
+        run: msbuild /t:Rebuild /p:Configuration=Release "SIMS Booking.sln"
         shell: powershell
 
       - name: End SonarCloud analysis
